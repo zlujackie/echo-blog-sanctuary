@@ -1,7 +1,7 @@
 
 # 个人博客后端 API
 
-基于 FastAPI 构建的个人博客后端系统，提供完整的文章管理、用户认证和管理后台功能。
+基于 FastAPI 构建的个人博客后端系统，采用 MVC 架构模式，提供完整的文章管理、用户认证和管理后台功能。
 
 ## 技术栈
 
@@ -11,6 +11,15 @@
 - **JWT**: 身份认证
 - **BCrypt**: 密码加密
 - **SQLite/PostgreSQL/MySQL**: 数据库支持
+
+## 架构设计
+
+本项目采用 **MVC (Model-View-Controller) 架构模式**：
+
+- **Models** (`models.py`): 数据库模型定义
+- **Views** (`routers/`): API 路由和请求处理
+- **Controllers** (`controllers/`): 业务逻辑控制
+- **Services** (`services/`): 具体业务实现
 
 ## 功能特性
 
@@ -87,6 +96,55 @@ uvicorn main:app --host 0.0.0.0 --port 8000
 - `PUT /api/articles/{id}` - 更新文章
 - `DELETE /api/articles/{id}` - 删除文章
 - `GET /api/admin/stats` - 获取统计数据
+
+## 项目结构
+
+```
+backend/
+├── main.py                   # FastAPI 应用入口
+├── database.py               # 数据库配置
+├── models.py                 # 数据库模型
+├── schemas.py                # Pydantic 数据模型
+├── auth.py                   # JWT 认证相关
+├── controllers/              # 控制器层
+│   ├── __init__.py
+│   ├── auth_controller.py    # 认证控制器
+│   ├── article_controller.py # 文章控制器
+│   └── admin_controller.py   # 管理控制器
+├── services/                 # 服务层
+│   ├── __init__.py
+│   ├── auth_service.py       # 认证服务
+│   ├── article_service.py    # 文章服务
+│   └── admin_service.py      # 管理服务
+├── routers/                  # 路由层
+│   ├── __init__.py
+│   ├── auth.py               # 认证路由
+│   ├── articles.py           # 文章路由
+│   └── admin.py              # 管理路由
+├── init_db.py                # 数据库初始化
+├── requirements.txt          # 依赖列表
+└── README.md                 # 说明文档
+```
+
+## MVC 架构说明
+
+### Controller 层
+负责接收请求、调用相应的服务、返回响应：
+- `AuthController`: 处理用户认证相关逻辑
+- `ArticleController`: 处理文章相关业务逻辑
+- `AdminController`: 处理管理后台逻辑
+
+### Service 层
+包含具体的业务实现逻辑：
+- `AuthService`: 用户注册、登录、令牌验证等
+- `ArticleService`: 文章的 CRUD 操作、搜索、点赞等
+- `AdminService`: 管理后台统计、用户管理等
+
+### Router 层 (View)
+定义 API 路由和参数验证：
+- `auth.py`: 认证相关 API 路由
+- `articles.py`: 文章相关 API 路由
+- `admin.py`: 管理后台 API 路由
 
 ## 数据库模型
 
@@ -166,27 +224,7 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 3. 处理错误响应
 4. 实现用户界面
 
-## 开发说明
-
-### 项目结构
-```
-backend/
-├── main.py              # 主应用文件
-├── database.py          # 数据库配置
-├── models.py            # 数据库模型
-├── schemas.py           # Pydantic 模型
-├── auth.py              # 认证相关
-├── routers/             # API 路由
-│   ├── __init__.py
-│   ├── auth.py          # 认证路由
-│   ├── articles.py      # 文章路由
-│   └── admin.py         # 管理路由
-├── init_db.py           # 数据库初始化
-├── requirements.txt     # 依赖列表
-└── README.md           # 说明文档
-```
-
-### 扩展功能
+## 扩展功能
 - 评论系统
 - 标签管理
 - 文件上传
